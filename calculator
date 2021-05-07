@@ -1,0 +1,51 @@
+#packages used just in case
+#!pip install googlesearch; !pip install requests; !pip install bs4
+#!pip install python-markdown-math; !pip install python-markdown-mathjax
+
+#importing things#
+import googlesearch as ggl; import requests; from bs4 import BeautifulSoup as bs
+from IPython.display import display, Image, HTML; from sympy import init_printing
+from IPython.lib.latextools import latex_to_png
+
+#defining things#
+components = []
+inquiry = str(input("Enter formula name: ")); wiki = " equation wikipedia"
+inquiry = inquiry + wiki
+def getdata(url): 
+    r = requests.get(url) 
+    return r.text
+componentcount= 0
+capital_case = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+lower_case  = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+               'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+#opens first result and grabs html formula#
+search_result = ggl.search(inquiry, tld = 'com', stop = 1)
+for url in search_result:
+    htmldata = getdata(url)
+    soup = bs(htmldata, 'html.parser')
+    for item in soup.find_all('img'):
+        components.append(item['alt'])
+while componentcount <= 5:
+    if components[0] == '':
+        components.pop(0)
+    for checker in components[0][:1]:
+        if checker in capital_case or checker in lower_case:
+            components.pop(0)
+    componentcount= componentcount + 1
+
+#print the html/mathjax thingy - for things
+if components[0][1:4] in lower_case:
+    print (components[1])
+    equation = components[1]
+else:
+    print (components[0])
+    equation = components[0]
+    
+#display equation with latex and IPython
+init_printing(use_latex = True)
+init_printing(use_unicode=False, wrap_line=False, no_global=True)
+data = latex_to_png(equation, wrap=True)
+#display(Image(data=data))
+display(HTML(equation))
