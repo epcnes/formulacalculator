@@ -1,11 +1,12 @@
 #packages used just in case
-#!pip install googlesearch; !pip install requests; !pip install bs4
+#!pip install google; !pip install requests; !pip install bs4
 #!pip install python-markdown-math; !pip install python-markdown-mathjax
 
 #importing things#
 import googlesearch as ggl; import requests; from bs4 import BeautifulSoup as bs
-from IPython.display import display, Image, HTML; from sympy import init_printing
-from IPython.lib.latextools import latex_to_png
+from sympy import init_printing; import sympy as sy
+from pylatexenc.latex2text import LatexNodes2Text
+init_printing()
 
 #defining things#
 components = []
@@ -34,18 +35,23 @@ while componentcount <= 5:
         if checker in capital_case or checker in lower_case:
             components.pop(0)
     componentcount= componentcount + 1
-
-#print the html/mathjax thingy - for things
-if components[0][1:4] in lower_case:
-    print (components[1])
+if components[0][:1] in lower_case:
     equation = components[1]
 else:
-    print (components[0])
     equation = components[0]
-    
-#display equation with latex and IPython
-init_printing(use_latex = True)
-init_printing(use_unicode=False, wrap_line=False, no_global=True)
-data = latex_to_png(equation, wrap=True)
-#display(Image(data=data))
-display(HTML(equation))
+# print (equation)
+#modifying the formula to work with the latex things
+equation = equation.split(" ")
+if equation[0] == "{\displaystyle":
+    del equation[0]
+items = len(equation) - 1
+seperator = " "
+equation = seperator.join(equation)
+equation.replace(",", "")
+# print (equation)
+#display equation please i beg
+#i am a god
+equation = sy.latex(equation)
+latex_string = rf"{equation}"
+equation = LatexNodes2Text().latex_to_text(latex_string)
+print(equation)
