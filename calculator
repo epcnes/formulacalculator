@@ -1,6 +1,5 @@
 #packages used just in case
 #!pip install google; !pip install requests; !pip install bs4
-#!pip install python-markdown-math; !pip install python-markdown-mathjax
 
 #importing things#
 import googlesearch as ggl; import requests; from bs4 import BeautifulSoup as bs
@@ -49,9 +48,10 @@ seperator = " "
 equation = seperator.join(equation)
 equation.replace(",", "")
 # print (equation)
+
 #display equation please i beg
 #i am a god
 equation = sy.latex(equation)
 latex_string = rf"{equation}"
-equation = LatexNodes2Text().latex_to_text(latex_string)
-print(equation)
+latex_equation = LatexNodes2Text().latex_to_text(latex_string)
+print(latex_equation)
