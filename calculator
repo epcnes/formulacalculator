@@ -19,6 +19,7 @@ capital_case = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
                 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 lower_case  = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
                'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+displaystyle = ['{\displaystyle', '[\\displaystyle']
 
 #opens first result and grabs html formula#
 search_result = ggl.search(inquiry, tld = 'com', stop = 1)
@@ -34,14 +35,16 @@ while componentcount <= 5:
         if checker in capital_case or checker in lower_case:
             components.pop(0)
     componentcount= componentcount + 1
+print (components[0:2])
 if components[0][:1] in lower_case:
-    equation = components[1]
+    equation = components[0]
 else:
     equation = components[0]
-# print (equation)
+print (equation)
+
 #modifying the formula to work with the latex things
 equation = equation.split(" ")
-if equation[0] == "{\displaystyle":
+if equation[0] in displaystyle:
     del equation[0]
 items = len(equation) - 1
 seperator = " "
@@ -55,3 +58,8 @@ equation = sy.latex(equation)
 latex_string = rf"{equation}"
 latex_equation = LatexNodes2Text().latex_to_text(latex_string)
 print(latex_equation)
+
+#make the variables in the formula usable
+#ask for input of variable values
+#if input = "solve for" then make it something
+#default (no input) is ya know what you're already solving for
